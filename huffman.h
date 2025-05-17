@@ -6,6 +6,7 @@
 using namespace std;
 
 const int MAXCHAR = 256;
+const int MAXBUFF = 1000;
 
 template <typename T>
 struct cmp {
@@ -27,18 +28,28 @@ struct HuffmanNode {
 class Huffman {
 protected:
     string inpFile, outFile;
+    vector<int> freq;
     vector<int> huffCodes;
     vector<int> codeLen;
     HuffmanNode* root;
-    priority_queue<HuffmanNode*, vector<HuffmanNode*>, cmp<HuffmanNode*>> pq;
-    void traverse(HuffmanNode*, int, int, vector<int>&);
 
 public:
     Huffman(string, string);
-    void createMinHeap();
     void createHuffmanTree();
-    void calculateCode();
-    void compress();
-    // void decompress();
-    // void recreateHuffmanTree();
+    void deleteHuffmanTree(HuffmanNode*);
+};
+
+class HuffmanEncoder: public Huffman {
+public:
+    HuffmanEncoder(string, string);
+    void countFrequency();
+    void traverse(HuffmanNode*, int, int, vector<int>&);
+    void assignCode();
+    void encode();
+};
+
+class HuffmanDecoder: public Huffman {
+public:
+    HuffmanDecoder(string, string);
+    void decode();
 };

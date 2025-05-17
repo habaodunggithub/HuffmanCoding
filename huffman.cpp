@@ -15,27 +15,21 @@ HuffmanNode::HuffmanNode(char _key) {
 Huffman::Huffman(string _inpFile, string _outFile) {
     inpFile = _inpFile;
     outFile = _outFile;
+    freq.resize(MAXCHAR, 0);
+    huffCodes.resize(MAXCHAR);
+    codeLen.resize(MAXCHAR);
+    root = nullptr;
 }
 
-void Huffman::createMinHeap() {
-    ifstream inp(inpFile);
-    vector<int> freq(MAXCHAR, 0);
-
-    char c;
-    while (inp.get(c))
-        freq[c]++;
-    inp.close();
-
+void Huffman::createHuffmanTree() {
+    priority_queue<HuffmanNode*, vector<HuffmanNode*>, cmp<HuffmanNode*>> pq;
     for (int i = 0; i < MAXCHAR; i++)
         if (freq[i]) {
             HuffmanNode* p = new HuffmanNode(char(i));
             p->freq = freq[i];
             pq.push(p);
         }
-    inp.close();
-}
 
-void Huffman::createHuffmanTree() {
     if (pq.size() == 1) {
         root = new HuffmanNode(pq.top()->key);
         root->freq = pq.top()->freq;
@@ -56,7 +50,26 @@ void Huffman::createHuffmanTree() {
     }
 }
 
-void Huffman::traverse(HuffmanNode* root, int code, int len, vector<int> &huffCodes) {
+void Huffman::deleteHuffmanTree(HuffmanNode* p) {
+    if (!p)
+        return;
+    deleteHuffmanTree(p->left);
+    deleteHuffmanTree(p->right);
+    delete p;
+}
+
+HuffmanEncoder::HuffmanEncoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
+
+void HuffmanEncoder::countFrequency() {
+    ifstream inp(inpFile);
+
+    char c;
+    while (inp.get(c))
+        freq[c]++;
+    inp.close();
+}
+
+void HuffmanEncoder::traverse(HuffmanNode* root, int code, int len, vector<int> &huffCodes) {
     if (!root->left && !root->right) {
         huffCodes[root->key] = code;
         codeLen[root->key] = len;
@@ -66,19 +79,23 @@ void Huffman::traverse(HuffmanNode* root, int code, int len, vector<int> &huffCo
     if (root->right) traverse(root->right, (code << 1) | 1, len+1, huffCodes);
 }
 
-void Huffman::calculateCode() {
+void HuffmanEncoder::assignCode() {
     huffCodes.resize(MAXCHAR);
     codeLen.resize(MAXCHAR);
     traverse(root, 0, 0, huffCodes);
 }
 
-void Huffman::compress() {
-    createMinHeap();
+void HuffmanEncoder::encode() {
+    countFrequency();
     createHuffmanTree();
-    calculateCode();
+    assignCode();
 
     ifstream inp(inpFile);
     ofstream out(outFile, ios::binary);
+
+    // Write frequency array to output file
+    for (int i = 0; i < MAXCHAR; i++)
+        out.write(reinterpret_cast<char*>(&freq[i]), sizeof(int));
 
     uint64_t bitBuffer = 0;
     int bitCount = 0;
@@ -106,4 +123,54 @@ void Huffman::compress() {
 
     inp.close();
     out.close();
+    deleteHuffmanTree(root);
+    root = nullptr;
+}
+
+HuffmanDecoder::HuffmanDecoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
+
+void HuffmanDecoder::decode() {
+    ifstream inp(inpFile, ios::binary);
+    ofstream out(outFile);
+
+    int charCount = 0; // Avoid decode padding bits
+    for (int i = 0; i < MAXCHAR; i++) {
+        inp.read(reinterpret_cast<char*>(&freq[i]), sizeof(int));
+        charCount += freq[i];
+    }
+
+    createHuffmanTree();
+    HuffmanNode* p = root;
+
+    int i = 0;
+    char byte;
+    char buffer[MAXBUFF];
+    while (inp.read(&byte, 1) && charCount) {
+        for (int j = 7; j >= 0 && charCount; j--) {
+            int bit = (byte >> j) & 1;
+            if (bit)
+                p = p->right;
+            else
+                p = p->left;
+            if (!p->left && !p->right) {
+                buffer[i%MAXBUFF] = p->key;
+                p = root;
+                i++;
+                charCount--;
+
+                if (i%MAXBUFF == 0)
+                    out << buffer;
+            }
+        }
+    }
+
+    // Leftover
+    if (i%MAXBUFF != 0)
+        for (int j = 0; j < i%MAXBUFF; j++)
+            out << buffer[j];
+
+    inp.close();
+    out.close();
+    deleteHuffmanTree(root);
+    root = nullptr;
 }

@@ -4,14 +4,15 @@
 int main(int argc, char** argv) {
     string query(argv[1]);
     if (query == "--encode") {
-        Huffman huffman(argv[2], argv[3]);
-        huffman.compress();
+        HuffmanEncoder encoder(argv[2], argv[3]);
+        encoder.encode();
     }
-    else if (argv[1] == "--decode") {
-        cout << "Not done.\n";
+    else if (query == "--decode") {
+        HuffmanDecoder decoder(argv[2], argv[3]);
+        decoder.decode();
     }
     else
-        cout << "Not done.\n";
+        cout << "Invalid query!\n";
 
     return 0;
 }
