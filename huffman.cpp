@@ -2,6 +2,82 @@
 #include <iostream>
 #include <cstdint>
 
+MinHeap::MinHeap() {
+    minHeap.clear();
+}
+
+int MinHeap::size() {
+    return minHeap.size();
+}
+
+int MinHeap::leftChild(int x) {
+    return 2*x + 1;
+}
+
+int MinHeap::rightChild(int x) {
+    return 2*x + 2;
+}
+
+int MinHeap::parent(int x) {
+    return (x - 1)/2;
+}
+
+void MinHeap::shift(int left, int right) {
+    if (left >= right)
+        return;
+    int i = left;
+    int j = leftChild(i);
+    HuffmanNode* x = minHeap[left];
+    while (j <= right) {
+        if (j < right) {
+            if (minHeap[j]->freq > minHeap[j + 1]->freq)
+                ++j;
+        }
+
+        if (minHeap[j]->freq >= x->freq)
+            break;
+
+        swap(minHeap[i], minHeap[j]);
+        i = j;
+        j = leftChild(i);
+    }
+
+    minHeap[i] = x;
+}
+
+void MinHeap::heapify() {
+    int i = minHeap.size()/2;
+    for (; i >= 0; --i) {
+        shift(i, minHeap.size() - 1);
+    }
+}
+
+void MinHeap::insertNode(HuffmanNode* k) {
+    minHeap.push_back(k);
+    int i = minHeap.size() - 1;
+
+    while (i != 0 && minHeap[parent(i)]->freq > minHeap[i]->freq) {
+       swap(minHeap[i], minHeap[parent(i)]);
+       i = parent(i);
+    }
+}
+
+HuffmanNode* MinHeap::pop() {
+    if (minHeap.size() <= 0)
+        return nullptr;
+
+    HuffmanNode* root = minHeap[0];
+    minHeap[0] = minHeap[minHeap.size() - 1];
+    minHeap.pop_back();
+    heapify();
+
+    return root;
+}
+
+bool MinHeap::isEmpty() {
+    return (minHeap.size() == 0);
+}
+
 HuffmanNode::HuffmanNode() {
     freq = 0;
     left = right = nullptr;
@@ -23,31 +99,28 @@ Huffman::Huffman(string _inpFile, string _outFile) {
 }
 
 void Huffman::createHuffmanTree() {
-    priority_queue<HuffmanNode*, vector<HuffmanNode*>, cmp<HuffmanNode*>> pq;
+    MinHeap pq;
     for (int i = 0; i < MAXCHAR; i++)
         if (freq[i]) {
             HuffmanNode* p = new HuffmanNode(char(i));
             p->freq = freq[i];
-            pq.push(p);
+            pq.insertNode(p);
         }
 
     if (pq.size() == 1) {
-        root = new HuffmanNode(pq.top()->key);
-        root->freq = pq.top()->freq;
+        root = pq.pop();
         return;
     }
 
     while (pq.size() > 1) {
         root = new HuffmanNode();
-        root->left = pq.top();
+        root->left = pq.pop();
         root->freq += root->left->freq;
-        pq.pop();
 
-        root->right = pq.top();
+        root->right = pq.pop();
         root->freq += root->right->freq;
-        pq.pop();
 
-        pq.push(root);
+        pq.insertNode(root);
     }
 }
 
@@ -81,8 +154,11 @@ void HuffmanEncoder::traverse(HuffmanNode* root, int code, int len, vector<int> 
 }
 
 void HuffmanEncoder::assignCode() {
-    huffCodes.resize(MAXCHAR);
-    codeLen.resize(MAXCHAR);
+    if (!root->left && !root->right) {
+        huffCodes[root->key] = 0;
+        codeLen[root->key] = 1;
+        return;
+    }
     traverse(root, 0, 0, huffCodes);
 }
 
@@ -141,34 +217,55 @@ void HuffmanDecoder::decode() {
     }
 
     createHuffmanTree();
+
+    // Huffman tree has 1 node
+    if (!root->left && !root->right) {
+        for (int i = 0; i < charCount; i++)
+            out.put(root->key);
+        inp.close();
+        out.close();
+        deleteHuffmanTree(root);
+        root = nullptr;
+        return;
+    }
+
+    int outIdx = 0;
+    char rawBuff[BUFFSIZE];
+    char outBuff[BUFFSIZE];
     HuffmanNode* p = root;
 
-    int i = 0;
-    char byte;
-    char buffer[MAXBUFF];
-    while (inp.read(&byte, 1) && charCount) {
-        for (int j = 7; j >= 0 && charCount; j--) {
-            int bit = (byte >> j) & 1;
-            if (bit)
-                p = p->right;
-            else
-                p = p->left;
-            if (!p->left && !p->right) {
-                buffer[i%MAXBUFF] = p->key;
-                p = root;
-                i++;
-                charCount--;
+    while (charCount) {
+        inp.read(rawBuff, BUFFSIZE);
+        streamsize bytesRead = inp.gcount();
 
-                if (i%MAXBUFF == 0)
-                    out << buffer;
+        if (bytesRead == 0)
+            break;
+
+        for (int i = 0; i < bytesRead && charCount; i++) {
+            unsigned char byte = rawBuff[i];
+            for (int j = 7; j >= 0 && charCount; j--) {
+                int bit = (byte >> j) & 1;
+                if (bit)
+                    p = p->right;
+                else
+                    p = p->left;
+                if (!p->left && !p->right) {
+                    outBuff[outIdx++] = p->key;
+                    p = root;
+                    charCount--;
+
+                    if (outIdx == BUFFSIZE) {
+                        out.write(outBuff, outIdx);
+                        outIdx = 0;
+                    }
+                }
             }
         }
     }
 
     // Leftover
-    if (i%MAXBUFF != 0)
-        for (int j = 0; j < i%MAXBUFF; j++)
-            out << buffer[j];
+    if (outIdx > 0)
+        out.write(outBuff, outIdx);
 
     inp.close();
     out.close();

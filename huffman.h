@@ -1,3 +1,5 @@
+#pragma once
+
 #include <queue>
 #include <vector>
 #include <string>
@@ -6,14 +8,7 @@
 using namespace std;
 
 const int MAXCHAR = 256;
-const int MAXBUFF = 1000;
-
-template <typename T>
-struct cmp {
-    bool operator()(const T& a, const T& b) const {
-        return a->freq > b->freq;
-    }
-};
+const int BUFFSIZE = 4096;
 
 struct HuffmanNode {
     char key;
@@ -23,6 +18,22 @@ struct HuffmanNode {
 
     HuffmanNode();
     HuffmanNode(char _key);
+};
+
+struct MinHeap {
+    vector<HuffmanNode*> minHeap;
+
+    MinHeap();
+
+    int size();
+    int leftChild(int);
+    int rightChild(int);
+    int parent(int);
+    void shift(int, int);
+    void heapify();
+    void insertNode(HuffmanNode*);
+    HuffmanNode* pop();
+    bool isEmpty();
 };
 
 class Huffman {
