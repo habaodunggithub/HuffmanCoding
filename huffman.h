@@ -6,7 +6,7 @@
 using namespace std;
 
 const int MAXCHAR = 256;
-const int MAXBUFF = 1000;
+const int BUFFSIZE = 4096;
 
 template <typename T>
 struct cmp {

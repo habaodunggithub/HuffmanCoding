@@ -80,8 +80,11 @@ void HuffmanEncoder::traverse(HuffmanNode* root, int code, int len, vector<int> 
 }
 
 void HuffmanEncoder::assignCode() {
-    huffCodes.resize(MAXCHAR);
-    codeLen.resize(MAXCHAR);
+    if (!root->left && !root->right) {
+        huffCodes[root->key] = 0;
+        codeLen[root->key] = 1;
+        return;
+    }
     traverse(root, 0, 0, huffCodes);
 }
 
@@ -140,34 +143,55 @@ void HuffmanDecoder::decode() {
     }
 
     createHuffmanTree();
+
+    // Huffman tree has 1 node
+    if (!root->left && !root->right) {
+        for (int i = 0; i < charCount; i++)
+            out.put(root->key);
+        inp.close();
+        out.close();
+        deleteHuffmanTree(root);
+        root = nullptr;
+        return;
+    }
+
+    int outIdx = 0;
+    char rawBuff[BUFFSIZE];
+    char outBuff[BUFFSIZE];
     HuffmanNode* p = root;
 
-    int i = 0;
-    char byte;
-    char buffer[MAXBUFF];
-    while (inp.read(&byte, 1) && charCount) {
-        for (int j = 7; j >= 0 && charCount; j--) {
-            int bit = (byte >> j) & 1;
-            if (bit)
-                p = p->right;
-            else
-                p = p->left;
-            if (!p->left && !p->right) {
-                buffer[i%MAXBUFF] = p->key;
-                p = root;
-                i++;
-                charCount--;
+    while (charCount) {
+        inp.read(rawBuff, BUFFSIZE);
+        streamsize bytesRead = inp.gcount();
 
-                if (i%MAXBUFF == 0)
-                    out << buffer;
+        if (bytesRead == 0)
+            break;
+
+        for (int i = 0; i < bytesRead && charCount; i++) {
+            unsigned char byte = rawBuff[i];
+            for (int j = 7; j >= 0 && charCount; j--) {
+                int bit = (byte >> j) & 1;
+                if (bit)
+                    p = p->right;
+                else
+                    p = p->left;
+                if (!p->left && !p->right) {
+                    outBuff[outIdx++] = p->key;
+                    p = root;
+                    charCount--;
+
+                    if (outIdx == BUFFSIZE) {
+                        out.write(outBuff, outIdx);
+                        outIdx = 0;
+                    }
+                }
             }
         }
     }
 
     // Leftover
-    if (i%MAXBUFF != 0)
-        for (int j = 0; j < i%MAXBUFF; j++)
-            out << buffer[j];
+    if (outIdx > 0)
+        out.write(outBuff, outIdx);
 
     inp.close();
     out.close();
