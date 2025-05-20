@@ -1,5 +1,6 @@
 #include "huffman.h"
 #include <iostream>
+#include <cstdint>
 
 HuffmanNode::HuffmanNode() {
     freq = 0;
