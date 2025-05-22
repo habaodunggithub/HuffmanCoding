@@ -204,6 +204,18 @@ void HuffmanEncoder::encode() {
     root = nullptr;
 }
 
+void encodeAndMeasure(string inFile, int times) {
+    for (int i = 0; i < times; ++i) {
+        auto start = std::chrono::high_resolution_clock::now();
+        HuffmanEncoder encoder(inFile, "temp/temp_code_" + std::to_string(i) + ".huf");
+        encoder.encode();
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        sum += duration.count();
+    }
+    std::cout << "Average time for encode: " << sum/times << "\n";
+}
+
 HuffmanDecoder::HuffmanDecoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
 
 void HuffmanDecoder::decode() {
@@ -271,4 +283,16 @@ void HuffmanDecoder::decode() {
     out.close();
     deleteHuffmanTree(root);
     root = nullptr;
+}
+
+void decodeAndMeasure(string inFile, int times) {
+    for (int i = 0; i < times; ++i) {
+        HuffmanDecoder decoder(inFile,  "temp/temp_output_" + std::to_string(i) + ".txt");
+        auto start = std::chrono::high_resolution_clock::now();
+        decoder.decode();
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        sum += duration.count();
+    }
+    std::cout << "Average time for decode: " << sum/times << "\n";
 }

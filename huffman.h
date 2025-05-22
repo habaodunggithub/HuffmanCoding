@@ -57,10 +57,12 @@ public:
     void traverse(HuffmanNode*, int, int, vector<int>&);
     void assignCode();
     void encode();
+    void encodeAndMeasure(string, int);
 };
 
 class HuffmanDecoder: public Huffman {
 public:
     HuffmanDecoder(string, string);
     void decode();
+    void decodeAndMeasure(string, int);
 };
