@@ -91,9 +91,6 @@ HuffmanNode::HuffmanNode(char _key) {
 Huffman::Huffman(string _inpFile, string _outFile) {
     inpFile = _inpFile;
     outFile = _outFile;
-    freq.resize(MAXCHAR, 0);
-    huffCodes.resize(MAXCHAR);
-    codeLen.resize(MAXCHAR);
     root = nullptr;
 }
 
@@ -123,18 +120,24 @@ void Huffman::createHuffmanTree() {
     }
 }
 
-void Huffman::deleteHuffmanTree(HuffmanNode* p) {
+void Huffman::deleteBottomUp(HuffmanNode* p) {
     if (!p)
         return;
-    deleteHuffmanTree(p->left);
-    deleteHuffmanTree(p->right);
+    deleteBottomUp(p->left);
+    deleteBottomUp(p->right);
     delete p;
+}
+
+void Huffman::deleteHuffmanTree() {
+    deleteBottomUp(root);
+    root = nullptr;
 }
 
 HuffmanEncoder::HuffmanEncoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
 
 void HuffmanEncoder::countFrequency() {
     ifstream inp(inpFile);
+    freq.resize(MAXCHAR, 0);
 
     char c;
     while (inp.get(c))
@@ -153,6 +156,8 @@ void HuffmanEncoder::traverse(HuffmanNode* root, int code, int len, vector<int> 
 }
 
 void HuffmanEncoder::assignCode() {
+    huffCodes.resize(MAXCHAR, 0);
+    codeLen.resize(MAXCHAR, 0);
     if (!root->left && !root->right) {
         huffCodes[root->key] = 0;
         codeLen[root->key] = 1;
@@ -199,8 +204,6 @@ void HuffmanEncoder::encode() {
 
     inp.close();
     out.close();
-    deleteHuffmanTree(root);
-    root = nullptr;
 }
 
 HuffmanDecoder::HuffmanDecoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
@@ -223,8 +226,7 @@ void HuffmanDecoder::decode() {
             out.put(root->key);
         inp.close();
         out.close();
-        deleteHuffmanTree(root);
-        root = nullptr;
+        deleteHuffmanTree();
         return;
     }
 
@@ -268,6 +270,4 @@ void HuffmanDecoder::decode() {
 
     inp.close();
     out.close();
-    deleteHuffmanTree(root);
-    root = nullptr;
 }

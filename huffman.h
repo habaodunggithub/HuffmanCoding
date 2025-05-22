@@ -39,15 +39,16 @@ struct MinHeap {
 class Huffman {
 protected:
     string inpFile, outFile;
-    vector<int> freq;
-    vector<int> huffCodes;
-    vector<int> codeLen;
     HuffmanNode* root;
 
 public:
+    vector<int> freq;
+    vector<int> huffCodes;
+    vector<int> codeLen;
     Huffman(string, string);
     void createHuffmanTree();
-    void deleteHuffmanTree(HuffmanNode*);
+    void deleteBottomUp(HuffmanNode*);
+    void deleteHuffmanTree();
 };
 
 class HuffmanEncoder: public Huffman {
