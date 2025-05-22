@@ -1,6 +1,7 @@
 #include "huffman.h"
 #include <iostream>
 #include <cstdint>
+#include <chrono>
 
 MinHeap::MinHeap() {
     minHeap.clear();
