@@ -1,0 +1,4 @@
+testcases/a
+testcases/aaa
+testcases/alphabet
+testcases/random
