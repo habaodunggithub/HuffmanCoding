@@ -1,5 +1,6 @@
 #pragma once
 
+#include "minHeap.h"
 #include <queue>
 #include <vector>
 #include <string>
@@ -18,22 +19,6 @@ struct HuffmanNode {
 
     HuffmanNode();
     HuffmanNode(char _key);
-};
-
-struct MinHeap {
-    vector<HuffmanNode*> minHeap;
-
-    MinHeap();
-
-    int size();
-    int leftChild(int);
-    int rightChild(int);
-    int parent(int);
-    void shift(int, int);
-    void heapify();
-    void insertNode(HuffmanNode*);
-    HuffmanNode* pop();
-    bool isEmpty();
 };
 
 class Huffman {
