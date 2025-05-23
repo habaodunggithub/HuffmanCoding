@@ -44,6 +44,7 @@ protected:
 public:
     Huffman();
     Huffman(string, string);
+    virtual ~Huffman();
 
     vector<int> freq;
     vector<int> huffCodes;
@@ -57,19 +58,21 @@ class HuffmanEncoder: public Huffman {
 public:
     HuffmanEncoder();
     HuffmanEncoder(string, string);
+    ~HuffmanEncoder();
 
     void countFrequency();
     void traverse(HuffmanNode*, int, int, vector<int>&);
     void assignCode();
     void encode();
-    void encodeAndMeasure(int);
+    void encodeAndMeasure(string, int);
 };
 
 class HuffmanDecoder: public Huffman {
 public:
     HuffmanDecoder();
     HuffmanDecoder(string, string);
+    ~HuffmanDecoder();
 
     void decode();
-    void decodeAndMeasure(int);
+    void decodeAndMeasure(string, int);
 };

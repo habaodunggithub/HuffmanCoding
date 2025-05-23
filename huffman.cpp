@@ -91,13 +91,19 @@ HuffmanNode::HuffmanNode(char _key) {
 }
 
 Huffman::Huffman() {
-
 }
 
 Huffman::Huffman(string _inpFile, string _outFile) {
     inpFile = _inpFile;
     outFile = _outFile;
     root = nullptr;
+
+    huffCodes.resize(MAXCHAR, 0);
+    codeLen.resize(MAXCHAR, 0);
+    freq.resize(MAXCHAR, 0);
+}
+
+Huffman::~Huffman() {
 }
 
 void Huffman::createHuffmanTree() {
@@ -140,9 +146,14 @@ void Huffman::deleteHuffmanTree() {
 }
 
 HuffmanEncoder::HuffmanEncoder() {
-    
+
 }
+
 HuffmanEncoder::HuffmanEncoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
+
+HuffmanEncoder::~HuffmanEncoder() {
+    deleteHuffmanTree();
+}
 
 void HuffmanEncoder::countFrequency() {
     ifstream inp(inpFile);
@@ -215,24 +226,28 @@ void HuffmanEncoder::encode() {
     out.close();
 }
 
-void HuffmanEncoder::encodeAndMeasure(int times) {
+void HuffmanEncoder::encodeAndMeasure(string inFile, int times) {
     unsigned long long sum = 0;
     for (int i = 0; i < times; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
-        HuffmanEncoder tempEncoder(inpFile, "Temp/temp_code_" + to_string(i) + ".huf");
-        tempEncoder.encode();
+        HuffmanEncoder encoder(inFile, "Temp/temp_code_" + std::to_string(i) + ".huf");
+        encoder.encode();
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         sum += duration.count();
-
-        tempEncoder.deleteHuffmanTree();
     }
-    cout << "Average time for encode: " << sum/times << " microsecond.\n";
+    std::cout << "Average time for encode: " << sum/times << "\n";
 }
 
 HuffmanDecoder::HuffmanDecoder() {
+
 }
+
 HuffmanDecoder::HuffmanDecoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
+
+HuffmanDecoder::~HuffmanDecoder() {
+    deleteHuffmanTree();
+}
 
 void HuffmanDecoder::decode() {
     ifstream inp(inpFile, ios::binary);
@@ -252,7 +267,6 @@ void HuffmanDecoder::decode() {
             out.put(root->key);
         inp.close();
         out.close();
-        deleteHuffmanTree();
         return;
     }
 
@@ -298,16 +312,15 @@ void HuffmanDecoder::decode() {
     out.close();
 }
 
-void HuffmanDecoder::decodeAndMeasure(int times) {
+void HuffmanDecoder::decodeAndMeasure(string inFile, int times) {
     unsigned long long sum = 0;
     for (int i = 0; i < times; ++i) {
-        HuffmanDecoder tempDecoder(inpFile,  "Temp/temp_output_" + to_string(i) + ".txt");
+        HuffmanDecoder decoder(inFile,  "Temp/temp_output_" + std::to_string(i) + ".txt");
         auto start = std::chrono::high_resolution_clock::now();
-        tempDecoder.decode();
+        decoder.decode();
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         sum += duration.count();
-        tempDecoder.deleteHuffmanTree();
     }
-    cout << "Average time for decode: " << sum/times << "\n";
+    std::cout << "Average time for decode: " << sum/times << "\n";
 }
