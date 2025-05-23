@@ -90,6 +90,10 @@ HuffmanNode::HuffmanNode(char _key) {
     left = right = nullptr;
 }
 
+Huffman::Huffman() {
+
+}
+
 Huffman::Huffman(string _inpFile, string _outFile) {
     inpFile = _inpFile;
     outFile = _outFile;
@@ -135,6 +139,9 @@ void Huffman::deleteHuffmanTree() {
     root = nullptr;
 }
 
+HuffmanEncoder::HuffmanEncoder() {
+    
+}
 HuffmanEncoder::HuffmanEncoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
 
 void HuffmanEncoder::countFrequency() {
@@ -208,18 +215,23 @@ void HuffmanEncoder::encode() {
     out.close();
 }
 
-void encodeAndMeasure(string inFile, int times) {
+void HuffmanEncoder::encodeAndMeasure(int times) {
+    unsigned long long sum = 0;
     for (int i = 0; i < times; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
-        HuffmanEncoder encoder(inFile, "temp/temp_code_" + std::to_string(i) + ".huf");
-        encoder.encode();
+        HuffmanEncoder tempEncoder(inpFile, "Temp/temp_code_" + to_string(i) + ".huf");
+        tempEncoder.encode();
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         sum += duration.count();
+
+        tempEncoder.deleteHuffmanTree();
     }
-    std::cout << "Average time for encode: " << sum/times << "\n";
+    cout << "Average time for encode: " << sum/times << " microsecond.\n";
 }
 
+HuffmanDecoder::HuffmanDecoder() {
+}
 HuffmanDecoder::HuffmanDecoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
 
 void HuffmanDecoder::decode() {
@@ -286,14 +298,16 @@ void HuffmanDecoder::decode() {
     out.close();
 }
 
-void decodeAndMeasure(string inFile, int times) {
+void HuffmanDecoder::decodeAndMeasure(int times) {
+    unsigned long long sum = 0;
     for (int i = 0; i < times; ++i) {
-        HuffmanDecoder decoder(inFile,  "temp/temp_output_" + std::to_string(i) + ".txt");
+        HuffmanDecoder tempDecoder(inpFile,  "Temp/temp_output_" + to_string(i) + ".txt");
         auto start = std::chrono::high_resolution_clock::now();
-        decoder.decode();
+        tempDecoder.decode();
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         sum += duration.count();
+        tempDecoder.deleteHuffmanTree();
     }
-    std::cout << "Average time for decode: " << sum/times << "\n";
+    cout << "Average time for decode: " << sum/times << "\n";
 }

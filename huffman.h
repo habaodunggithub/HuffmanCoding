@@ -42,10 +42,12 @@ protected:
     HuffmanNode* root;
 
 public:
+    Huffman();
+    Huffman(string, string);
+
     vector<int> freq;
     vector<int> huffCodes;
     vector<int> codeLen;
-    Huffman(string, string);
     void createHuffmanTree();
     void deleteBottomUp(HuffmanNode*);
     void deleteHuffmanTree();
@@ -53,17 +55,21 @@ public:
 
 class HuffmanEncoder: public Huffman {
 public:
+    HuffmanEncoder();
     HuffmanEncoder(string, string);
+
     void countFrequency();
     void traverse(HuffmanNode*, int, int, vector<int>&);
     void assignCode();
     void encode();
-    void encodeAndMeasure(string, int);
+    void encodeAndMeasure(int);
 };
 
 class HuffmanDecoder: public Huffman {
 public:
+    HuffmanDecoder();
     HuffmanDecoder(string, string);
+
     void decode();
-    void decodeAndMeasure(string, int);
+    void decodeAndMeasure(int);
 };
