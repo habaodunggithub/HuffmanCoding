@@ -1,4 +1,4 @@
-testcases/a
-testcases/aaa
-testcases/alphabet
-testcases/random
+a
+aaa
+alphabet
+random

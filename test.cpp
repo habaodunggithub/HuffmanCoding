@@ -40,7 +40,7 @@ void testFromFileList(const string &listPath) {
     while (getline(listFile, fileName)) {
         if (fileName.empty()) continue;
 
-        HuffmanEncoder encoder(fileName + ".txt", fileName + ".huf");
+        HuffmanEncoder encoder("TheArtificialCorpus/" + fileName + ".txt", "Compressed/" + fileName + ".huf");
         encoder.encode();
         computeBitLengthAndEntropy(encoder.freq, encoder.codeLen);
         encoder.deleteHuffmanTree();

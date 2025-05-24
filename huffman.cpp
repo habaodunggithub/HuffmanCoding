@@ -3,82 +3,6 @@
 #include <cstdint>
 #include <chrono>
 
-MinHeap::MinHeap() {
-    minHeap.clear();
-}
-
-int MinHeap::size() {
-    return minHeap.size();
-}
-
-int MinHeap::leftChild(int x) {
-    return 2*x + 1;
-}
-
-int MinHeap::rightChild(int x) {
-    return 2*x + 2;
-}
-
-int MinHeap::parent(int x) {
-    return (x - 1)/2;
-}
-
-void MinHeap::shift(int left, int right) {
-    if (left >= right)
-        return;
-    int i = left;
-    int j = leftChild(i);
-    HuffmanNode* x = minHeap[left];
-    while (j <= right) {
-        if (j < right) {
-            if (minHeap[j]->freq > minHeap[j + 1]->freq)
-                ++j;
-        }
-
-        if (minHeap[j]->freq >= x->freq)
-            break;
-
-        swap(minHeap[i], minHeap[j]);
-        i = j;
-        j = leftChild(i);
-    }
-
-    minHeap[i] = x;
-}
-
-void MinHeap::heapify() {
-    int i = minHeap.size()/2;
-    for (; i >= 0; --i) {
-        shift(i, minHeap.size() - 1);
-    }
-}
-
-void MinHeap::insertNode(HuffmanNode* k) {
-    minHeap.push_back(k);
-    int i = minHeap.size() - 1;
-
-    while (i != 0 && minHeap[parent(i)]->freq > minHeap[i]->freq) {
-       swap(minHeap[i], minHeap[parent(i)]);
-       i = parent(i);
-    }
-}
-
-HuffmanNode* MinHeap::pop() {
-    if (minHeap.size() <= 0)
-        return nullptr;
-
-    HuffmanNode* root = minHeap[0];
-    minHeap[0] = minHeap[minHeap.size() - 1];
-    minHeap.pop_back();
-    heapify();
-
-    return root;
-}
-
-bool MinHeap::isEmpty() {
-    return (minHeap.size() == 0);
-}
-
 HuffmanNode::HuffmanNode() {
     freq = 0;
     left = right = nullptr;
@@ -90,10 +14,20 @@ HuffmanNode::HuffmanNode(char _key) {
     left = right = nullptr;
 }
 
+Huffman::Huffman() {
+}
+
 Huffman::Huffman(string _inpFile, string _outFile) {
     inpFile = _inpFile;
     outFile = _outFile;
     root = nullptr;
+
+    huffCodes.resize(MAXCHAR, 0);
+    codeLen.resize(MAXCHAR, 0);
+    freq.resize(MAXCHAR, 0);
+}
+
+Huffman::~Huffman() {
 }
 
 void Huffman::createHuffmanTree() {
@@ -135,7 +69,15 @@ void Huffman::deleteHuffmanTree() {
     root = nullptr;
 }
 
+HuffmanEncoder::HuffmanEncoder() {
+
+}
+
 HuffmanEncoder::HuffmanEncoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
+
+HuffmanEncoder::~HuffmanEncoder() {
+    deleteHuffmanTree();
+}
 
 void HuffmanEncoder::countFrequency() {
     ifstream inp(inpFile);
@@ -208,10 +150,11 @@ void HuffmanEncoder::encode() {
     out.close();
 }
 
-void encodeAndMeasure(string inFile, int times) {
+void HuffmanEncoder::encodeAndMeasure(string inFile, int times) {
+    unsigned long long sum = 0;
     for (int i = 0; i < times; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
-        HuffmanEncoder encoder(inFile, "temp/temp_code_" + std::to_string(i) + ".huf");
+        HuffmanEncoder encoder(inFile, "Temp/temp_code_" + std::to_string(i) + ".huf");
         encoder.encode();
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -220,7 +163,15 @@ void encodeAndMeasure(string inFile, int times) {
     std::cout << "Average time for encode: " << sum/times << "\n";
 }
 
+HuffmanDecoder::HuffmanDecoder() {
+
+}
+
 HuffmanDecoder::HuffmanDecoder(string _inpFile, string _outFile): Huffman(_inpFile, _outFile) {};
+
+HuffmanDecoder::~HuffmanDecoder() {
+    deleteHuffmanTree();
+}
 
 void HuffmanDecoder::decode() {
     ifstream inp(inpFile, ios::binary);
@@ -240,7 +191,6 @@ void HuffmanDecoder::decode() {
             out.put(root->key);
         inp.close();
         out.close();
-        deleteHuffmanTree();
         return;
     }
 
@@ -286,9 +236,10 @@ void HuffmanDecoder::decode() {
     out.close();
 }
 
-void decodeAndMeasure(string inFile, int times) {
+void HuffmanDecoder::decodeAndMeasure(string inFile, int times) {
+    unsigned long long sum = 0;
     for (int i = 0; i < times; ++i) {
-        HuffmanDecoder decoder(inFile,  "temp/temp_output_" + std::to_string(i) + ".txt");
+        HuffmanDecoder decoder(inFile,  "Temp/temp_output_" + std::to_string(i) + ".txt");
         auto start = std::chrono::high_resolution_clock::now();
         decoder.decode();
         auto end = std::chrono::high_resolution_clock::now();

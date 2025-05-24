@@ -1,5 +1,6 @@
 #pragma once
 
+#include "minHeap.h"
 #include <queue>
 #include <vector>
 #include <string>
@@ -20,32 +21,19 @@ struct HuffmanNode {
     HuffmanNode(char _key);
 };
 
-struct MinHeap {
-    vector<HuffmanNode*> minHeap;
-
-    MinHeap();
-
-    int size();
-    int leftChild(int);
-    int rightChild(int);
-    int parent(int);
-    void shift(int, int);
-    void heapify();
-    void insertNode(HuffmanNode*);
-    HuffmanNode* pop();
-    bool isEmpty();
-};
-
 class Huffman {
 protected:
     string inpFile, outFile;
     HuffmanNode* root;
 
 public:
+    Huffman();
+    Huffman(string, string);
+    virtual ~Huffman();
+
     vector<int> freq;
     vector<int> huffCodes;
     vector<int> codeLen;
-    Huffman(string, string);
     void createHuffmanTree();
     void deleteBottomUp(HuffmanNode*);
     void deleteHuffmanTree();
@@ -53,7 +41,10 @@ public:
 
 class HuffmanEncoder: public Huffman {
 public:
+    HuffmanEncoder();
     HuffmanEncoder(string, string);
+    ~HuffmanEncoder();
+
     void countFrequency();
     void traverse(HuffmanNode*, int, int, vector<int>&);
     void assignCode();
@@ -63,7 +54,10 @@ public:
 
 class HuffmanDecoder: public Huffman {
 public:
+    HuffmanDecoder();
     HuffmanDecoder(string, string);
+    ~HuffmanDecoder();
+
     void decode();
     void decodeAndMeasure(string, int);
 };
