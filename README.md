@@ -14,6 +14,36 @@ Huffman Coding là một thuật toán nén không mất dữ liệu, thường 
 - Quản lý dữ liệu đầu vào/đầu ra tự động qua file
 
 ---
+
+## 🛠️ Cách sử dụng
+Di chuyển đường dẫn đến folder dự án và gõ câu lệnh sau trên cửa sổ dòng lệnh:
+
+<pre> run.bat </pre>
+
+Khi đó sẽ xuất hiện các option của chương trình:
+```
+1. Encode                                      # Mã hóa
+2. Decode                                      # Giải mã
+3. Encode and measure average execution time   # Đo thời gian mã hóa trung bình
+4. Decode and measure average execution time   # Đo thời gian giải mã trung bình
+5. Quit.                                       # Thoát chương trình  
+```
+
+> Đối với hàm các hàm decode, người dùng cần phải encode file đó trước khi tiến hành decode để tránh lỗi truy cập
+
+Nếu muốn mã hóa tập tin từ người dùng có thể chọn option `1`:
+```
+1. a.txt: contains only one character 'a'.
+2. aaa.txt: contains 100.000 character 'a'.
+3. alphabet.txt: contains 100.000 repeating alphabet characters.
+4. random.txt: contains 100.000 random characters.
+5. user-selected file.
+```
+Sau đó chọn `5` và nhập tên file, lưu ý file phải cùng đường dẫn với folder dự án hoặc cung cấp đường dẫn tuyệt đối.
+
+Khi muốn giải mã chọn option `2`, `5` và quan sát kết quả ở folder data/result.
+
+---
 ## 📁 Cấu trúc thư mục
 ```
 HuffmanCoding/
@@ -44,12 +74,3 @@ HuffmanCoding/
 ├── run.bat                   # File script chạy Lệnh chạy chương trình
 └── README.md                 # File mô tả dự án
 ```
-
-## 🛠️ Cách build và chạy
-Di chuyển đường dẫn đến folder dự án và gõ câu lệnh sau:
-
-<pre> run.bat </pre>
-
-## Cách sử dụng
-
-Đối với hàm các hàm decode, người dùng cần phải encode file đó trước khi tiến hành decode để tránh lỗi truy cập
