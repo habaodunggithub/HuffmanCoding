@@ -1,7 +1,7 @@
 @echo off
-g++ src/huffman.cpp src/main.cpp src/minHeap.cpp src/sideFunc.cpp -o build/HuffmanCoding
+g++ src/huffman.cpp src/main.cpp src/minHeap.cpp src/sideFunc.cpp -o HuffmanCoding
 if %errorlevel% neq 0 (
     echo Build failed!
     exit /b %errorlevel%
 )
-.\build\HuffmanCoding.exe
+HuffmanCoding.exe
