@@ -33,6 +33,7 @@ HuffmanCoding/
 │   ├── sideFunc.cpp
 │   └── test.cpp
 ├── file_list.txt               # Danh sách file/dataset dùng để chạy
+├── run.bat                     # File script chứa lệnh chạy chương trình
 └── README.md                   # File mô tả dự án
 ```
 
