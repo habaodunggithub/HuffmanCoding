@@ -12,8 +12,6 @@ void processQuery() {
         cout << "5. Quit.\n";
         cout << "Enter your option: ";
         cin >> choice;
-        cin.clear();
-        cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
     
         if (choice == 1) 
             processChoice1();

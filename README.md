@@ -42,14 +42,7 @@ HuffmanCoding/
 └── README.md # File mô tả dự án
 
 ## 🛠️ Cách build và chạy
-
-### Yêu cầu:
-- Trình biên dịch C++ (MSVC / g++)
-- CMake >= 3.10
-- (Nếu dùng Windows) Gợi ý: dùng VSCode + MSYS2 hoặc Visual Studio
-
-### Build bằng CMake
-
 ```bash
-cmake -B build
-cmake --build build --target run_terminal
+cd HuffmanCoding
+g++ src/huffman.cpp src/main.cpp src/minHeap.cpp src/sideFunc.cpp -o build/HuffmanCoding
+build/HuffmanCoding.exe
