@@ -20,16 +20,36 @@ Di chuyển đường dẫn đến folder dự án và gõ câu lệnh sau trên
 
 <pre> run.bat </pre>
 
-Khi đó sẽ xuất hiện các option của chương trình:
+Khi chạy, chương trình sẽ hiển thị Menu như sau:
 ```
-1. Encode                                      # Mã hóa
-2. Decode                                      # Giải mã
-3. Encode and measure average execution time   # Đo thời gian mã hóa trung bình
-4. Decode and measure average execution time   # Đo thời gian giải mã trung bình
+1. Encode                                      # Nén tệp
+2. Decode                                      # Giải nén tệp
+3. Encode and measure average execution time   # Đo thời gian nén trung bình
+4. Decode and measure average execution time   # Đo thời gian giải nén trung bình
 5. Quit.                                       # Thoát chương trình  
 ```
 
 > Đối với hàm các hàm decode, người dùng cần phải encode file đó trước khi tiến hành decode để tránh lỗi truy cập
+
+1. Encode (Nén tệp)
+- Chọn một trong các tệp mẫu có sẵn hoặc tự nhập đường dẫn tệp.
+
+- Chọn thuật toán nén: Static Huffman hoặc Adaptive Huffman.
+
+- Kết quả sẽ được lưu trong thư mục data/compressed/.
+
+2. Decode (Giải nén tệp)
+- Chọn một tệp đã nén tương ứng.
+
+- Chọn thuật toán đã dùng để nén trước đó.
+
+- Kết quả được lưu vào data/result/.
+
+3. Encode and measure average execution time
+- Tương tự mục (1) nhưng có thêm tùy chọn số lần chạy để tính thời gian trung bình nén.
+
+4. Decode and measure average execution time
+- Tương tự mục (2) nhưng có thêm tùy chọn số lần chạy để tính thời gian trung bình giải nén.
 
 Nếu muốn mã hóa tập tin từ người dùng có thể chọn option `1`:
 ```
@@ -39,9 +59,9 @@ Nếu muốn mã hóa tập tin từ người dùng có thể chọn option `1`:
 4. random.txt: contains 100.000 random characters.
 5. user-selected file.
 ```
-Sau đó chọn `5` và nhập tên file, lưu ý file phải cùng đường dẫn với folder dự án hoặc cung cấp đường dẫn tuyệt đối.
+Sau đó chọn `5` và nhập tên file. Với lựa chọn `user-selected file`, cần nhập đường dẫn chính xác đến tệp văn bản hoặc để cùng đường dẫn với folder dự án.
 
-Khi muốn giải mã chọn option `2`, `5` và quan sát kết quả ở folder data/result.
+Khi muốn giải nén chọn option `2`, `5`, `1`  và quan sát kết quả ở folder data/result/.
 
 ---
 ## 📁 Cấu trúc thư mục
