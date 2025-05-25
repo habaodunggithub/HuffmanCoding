@@ -14,7 +14,7 @@ Huffman Coding là một thuật toán nén không mất dữ liệu, thường 
 - Quản lý dữ liệu đầu vào/đầu ra tự động qua file
 
 ---
-
+```
 ## 📁 Cấu trúc thư mục
 HuffmanCoding/
 ├── build/                      # Thư mục chứa file build
@@ -35,6 +35,7 @@ HuffmanCoding/
 │   └── test.cpp
 ├── file_list.txt               # Danh sách file/dataset dùng để chạy
 └── README.md                   # File mô tả dự án
+```
 
 ## 🛠️ Cách build và chạy
 ```bash
