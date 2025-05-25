@@ -1,5 +1,5 @@
-#include "sideFunc.h"
-#include "huffman.h"
+#include "../include/sideFunc.h"
+#include "../include/huffman.h"
 
 void processQuery() {
     int choice;
@@ -39,19 +39,19 @@ void processChoice1() {
     cin >> choice;
 
     if (choice == 1) {
-        HuffmanEncoder encoder("TheArtificialCorpus/a.txt", "Compressed/a.huf");
+        HuffmanEncoder encoder("data/TheArtificialCorpus/a.txt", "data/compressed/a.huf");
         encoder.encode();
     }
     else if (choice == 2) {
-        HuffmanEncoder encoder("TheArtificialCorpus/aaa.txt", "Compressed/aaa.huf");
+        HuffmanEncoder encoder("data/TheArtificialCorpus/aaa.txt", "data/compressed/aaa.huf");
         encoder.encode();
     }
     else if (choice == 3) {
-        HuffmanEncoder encoder("TheArtificialCorpus/alphabet.txt", "Compressed/alphabet.huf");
+        HuffmanEncoder encoder("data/TheArtificialCorpus/alphabet.txt", "data/compressed/alphabet.huf");
         encoder.encode();
     }
     else if (choice == 4) {
-        HuffmanEncoder encoder("TheArtificialCorpus/random.txt", "Compressed/random.huf");
+        HuffmanEncoder encoder("data/TheArtificialCorpus/random.txt", "data/compressed/random.huf");
         encoder.encode();
     }
     else 
@@ -69,19 +69,19 @@ void processChoice2() {
     cin >> choice;
 
     if (choice == 1) {
-        HuffmanDecoder decoder("Compressed/a.huf", "Result/result_a.txt");
+        HuffmanDecoder decoder("data/compressed/a.huf", "data/result/result_a.txt");
         decoder.decode();
     }
     else if (choice == 2) {
-        HuffmanDecoder decoder("Compressed/aaa.huf", "Result/result_aaa.txt");
+        HuffmanDecoder decoder("data/compressed/aaa.huf", "data/result/result_aaa.txt");
         decoder.decode();
     }
     else if (choice == 3) {
-        HuffmanDecoder decoder("Compressed/alphabet.huf", "Result/result_alphabet.txt");
+        HuffmanDecoder decoder("data/compressed/alphabet.huf", "data/result/result_alphabet.txt");
         decoder.decode();
     }
     else if (choice == 4) {
-        HuffmanDecoder decoder("Compressed/random.huf", "Result/result_random.txt");
+        HuffmanDecoder decoder("data/compressed/random.huf", "data/result/result_random.txt");
         decoder.decode();
     }
     else 
@@ -103,20 +103,20 @@ void processChoice3() {
     cin >> times;
 
     if (choice == 1) {
-        HuffmanEncoder encoder("TheArtificialCorpus/a.txt", "Compressed/a.huf");
-        encoder.encodeAndMeasure("TheArtificialCorpus/a.txt", times);
+        HuffmanEncoder encoder("data/TheArtificialCorpus/a.txt", "data/compressed/a.huf");
+        encoder.encodeAndMeasure("data/TheArtificialCorpus/a.txt", times);
     }
     else if (choice == 2) {
-        HuffmanEncoder encoder("TheArtificialCorpus/aaa.txt", "Compressed/aaa.huf");
-        encoder.encodeAndMeasure("TheArtificialCorpus/aaa.txt", times);
+        HuffmanEncoder encoder("data/TheArtificialCorpus/aaa.txt", "data/compressed/aaa.huf");
+        encoder.encodeAndMeasure("data/TheArtificialCorpus/aaa.txt", times);
     }
     else if (choice == 3) {
-        HuffmanEncoder encoder("TheArtificialCorpus/alphabet.txt", "Compressed/alphabet.huf");
-        encoder.encodeAndMeasure("TheArtificialCorpus/alphabet.txt", times);
+        HuffmanEncoder encoder("data/TheArtificialCorpus/alphabet.txt", "data/compressed/alphabet.huf");
+        encoder.encodeAndMeasure("data/TheArtificialCorpus/alphabet.txt", times);
     }
     else if (choice == 4) {
-        HuffmanEncoder encoder("TheArtificialCorpus/random.txt", "Compressed/random.huf");
-        encoder.encodeAndMeasure("TheArtificialCorpus/random.txt", times);
+        HuffmanEncoder encoder("data/TheArtificialCorpus/random.txt", "data/compressed/random.huf");
+        encoder.encodeAndMeasure("data/TheArtificialCorpus/random.txt", times);
     }
     else 
         cout << "Invalid!.\n";
@@ -137,20 +137,20 @@ void processChoice4() {
     cin >> times;
 
     if (choice == 1) {
-        HuffmanDecoder decoder("Compressed/a.huf", "Result/result_a.txt");
-        decoder.decodeAndMeasure("Compressed/a.huf", times);
+        HuffmanDecoder decoder("data/compressed/a.huf", "data/result/result_a.txt");
+        decoder.decodeAndMeasure("data/compressed/a.huf", times);
     }
     else if (choice == 2) {
-        HuffmanDecoder decoder("Compressed/aaa.huf", "Result/result_aaa.txt");
-        decoder.decodeAndMeasure("Compressed/aaa.huf", times);
+        HuffmanDecoder decoder("data/compressed/aaa.huf", "data/result/result_aaa.txt");
+        decoder.decodeAndMeasure("data/compressed/aaa.huf", times);
     }
     else if (choice == 3) {
-        HuffmanDecoder decoder("Compressed/alphabet.huf", "Result/result_alphabet.txt");
-        decoder.decodeAndMeasure("Compressed/alphabet.huf", times);
+        HuffmanDecoder decoder("data/compressed/alphabet.huf", "data/result/result_alphabet.txt");
+        decoder.decodeAndMeasure("data/compressed/alphabet.huf", times);
     }
     else if (choice == 4) {
-        HuffmanDecoder decoder("Compressed/random.huf", "Result/random.txt");
-        decoder.decodeAndMeasure("Compressed/random.huf", times);
+        HuffmanDecoder decoder("data/compressed/random.huf", "data/result/random.txt");
+        decoder.decodeAndMeasure("data/compressed/random.huf", times);
     }
     else 
         cout << "Invalid!.\n";
