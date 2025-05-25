@@ -34,6 +34,7 @@ void processChoice1() {
     cout << "2. aaa.txt: contains 100.000 character 'a'.\n";
     cout << "3. alphabet.txt: contains 100.000 repeating alphabet characters.\n";
     cout << "4. random.txt: contains 100.000 random characters.\n";
+    cout << "5. user-selected file.\n";
     cout << "Enter your option: ";
     int choice;
     cin >> choice;
@@ -54,6 +55,13 @@ void processChoice1() {
         HuffmanEncoder encoder("data/TheArtificialCorpus/random.txt", "data/compressed/random.huf");
         encoder.encode();
     }
+    else if (choice == 5) {
+        string filePath;
+        cout << "Enter file path: ";
+        cin >> filePath;
+        HuffmanEncoder encoder(filePath, "data/compressed/userSample.huf");
+        encoder.encode();
+    }
     else 
         cout << "Invalid!.\n";
 }
@@ -64,6 +72,7 @@ void processChoice2() {
     cout << "2. aaa.huf: encoded from aaa.txt.\n";
     cout << "3. alphabet.huf: encoded from alphabet.txt.\n";
     cout << "4. random.huf: encoded from random.txt.\n";
+    cout << "5. user-selected file.\n";
     cout << "Enter your option: ";
     int choice;
     cin >> choice;
@@ -84,6 +93,10 @@ void processChoice2() {
         HuffmanDecoder decoder("data/compressed/random.huf", "data/result/result_random.txt");
         decoder.decode();
     }
+    else if (choice == 5) {
+        HuffmanDecoder decoder("data/compressed/userSample.huf", "data/result/result_userSample.txt");
+        decoder.decode();
+    }
     else 
         cout << "Invalid!.\n";
 }
@@ -94,6 +107,7 @@ void processChoice3() {
     cout << "2. aaa.txt: contains 100.000 character 'a'.\n";
     cout << "3. alphabet.txt: contains 100.000 repeating alphabet characters.\n";
     cout << "4. random.txt: contains 100.000 random characters.\n";
+    cout << "5. user-selected file.\n";
     cout << "Enter your option: ";
     int choice;
     cin >> choice;
@@ -118,6 +132,13 @@ void processChoice3() {
         HuffmanEncoder encoder("data/TheArtificialCorpus/random.txt", "data/compressed/random.huf");
         encoder.encodeAndMeasure("data/TheArtificialCorpus/random.txt", times);
     }
+    else if (choice == 5) {
+        string filePath;
+        cout << "Enter file path: ";
+        cin >> filePath;
+        HuffmanEncoder encoder(filePath, "data/compressed/userSample.huf");
+        encoder.encodeAndMeasure(filePath, times);
+    }
     else 
         cout << "Invalid!.\n";
 }
@@ -128,6 +149,7 @@ void processChoice4() {
     cout << "2. aaa.huf: encoded from aaa.txt.\n";
     cout << "3. alphabet.huf: encoded from alphabet.txt.\n";
     cout << "4. random.huf: encoded from random.txt.\n";
+    cout << "5. user-selected file.\n";
     cout << "Enter your option: ";
     int choice;
     cin >> choice;
@@ -151,6 +173,10 @@ void processChoice4() {
     else if (choice == 4) {
         HuffmanDecoder decoder("data/compressed/random.huf", "data/result/random.txt");
         decoder.decodeAndMeasure("data/compressed/random.huf", times);
+    }
+    else if (choice == 5) {
+        HuffmanDecoder decoder("data/compressed/userSample.huf", "data/result/result_userSample.txt");
+        decoder.decodeAndMeasure("data/compressed/userSample.huf", times);
     }
     else 
         cout << "Invalid!.\n";

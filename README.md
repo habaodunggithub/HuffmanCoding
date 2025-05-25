@@ -40,5 +40,6 @@ HuffmanCoding/
 ## 🛠️ Cách build và chạy
 ```bash
 cd HuffmanCoding
+mkdir build
 g++ src/huffman.cpp src/main.cpp src/minHeap.cpp src/sideFunc.cpp -o build/HuffmanCoding
-build/HuffmanCoding.exe
+build\HuffmanCoding.exe
