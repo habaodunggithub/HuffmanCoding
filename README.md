@@ -40,4 +40,4 @@ HuffmanCoding/
 ## 🛠️ Cách build và chạy
 Di chuyển đường dẫn đến folder dự án và gõ câu lệnh sau:
 
-<pre> ```run.bat``` </pre>
+<pre> run.bat </pre>
