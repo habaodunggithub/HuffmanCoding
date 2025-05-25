@@ -1,6 +1,6 @@
 # Huffman Coding
 
-> Một dự án mã hóa và giải mã văn bản sử dụng thuật toán Huffman, được viết bằng C++ và quản lý bằng CMake.
+> Một dự án mã hóa và giải mã văn bản sử dụng thuật toán Huffman viết bằng ngôn ngữ C++.
 
 ---
 
@@ -38,8 +38,5 @@ HuffmanCoding/
 ```
 
 ## 🛠️ Cách build và chạy
-```bash
-cd HuffmanCoding
-mkdir build
-g++ src/huffman.cpp src/main.cpp src/minHeap.cpp src/sideFunc.cpp -o build/HuffmanCoding
-build\HuffmanCoding.exe
+Di chuyển đường dẫn đến folder dự án và gõ câu lệnh sau:
+`run.bat`
